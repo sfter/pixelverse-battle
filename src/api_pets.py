@@ -8,6 +8,7 @@ from src.Battle import print_with_timestamp, merah, biru, kuning, hijau, hitam, 
 
 init(autoreset=True)
 
+
 def split_chunk(var):
     if isinstance(var, int):
         var = str(var)
@@ -15,11 +16,10 @@ def split_chunk(var):
     var = var[::-1]
     return ','.join([var[i:i + n] for i in range(0, len(var), n)])[::-1]
 
+
 class UserPixel:
-    def __init__(self):
-        with open('./config.json', 'r') as file:
-            self.config = json.load(file)
-        
+    def __init__(self, config):
+        self.config = config
         self.headers = {
             "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
             "Connection": "keep-alive",
@@ -46,7 +46,7 @@ class UserPixel:
         url = "https://api-clicker.pixelverse.xyz/api/battles/my/stats"
         req = requests.get(url, headers=self.headers)
         return req.json()
-    
+
     def getPets(self):
         data = self.getUsers()
         url = "https://api-clicker.pixelverse.xyz/api/pets"
@@ -76,8 +76,9 @@ class UserPixel:
                     print_with_timestamp(f"{hijau}] success upgrade {kuning}{pet['name']}")
                     sleep(0.5)
                 else:
-                    print_with_timestamp(f"{hijau}{pet['name']} cost: {putih}-{split_chunk(str(int(pet['userPet']['levelUpPrice'] - currBalance)))} coins left!")
-        
+                    print_with_timestamp(
+                        f"{hijau}{pet['name']} cost: {putih}-{split_chunk(str(int(pet['userPet']['levelUpPrice'] - currBalance)))} coins left!")
+
         # Menambahkan logika untuk mengecek apakah ada pet yang bisa di-upgrade
         for pet in pets:
             if not ('isMaxLevel' in pet['userPet'] and pet['userPet']['isMaxLevel']):

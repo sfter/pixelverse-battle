@@ -2,6 +2,8 @@ import asyncio
 import json
 import sys
 import os
+import argparse
+import random
 from src.Battle import Battle
 from src.Battle import countdown_timer, split_chunk,clear_screen
 from src.Battle import print_with_timestamp, merah,biru,kuning,hijau,hitam,putih,reset
@@ -40,17 +42,21 @@ async def update_user_info(user):
     print_with_timestamp(f"{hijau}Winrate: {putih}{winRate:.2f}%\t " 
     f"{kuning}| {biru}Earned: {split_chunk(str(stats['winsReward'] + stats['losesReward']))}")
 async def main():
+    arg = argparse.ArgumentParser()
+    arg.add_argument('--config', help="Custom config file (default: config.json)", default="config.json")
+
+    args = arg.parse_args()
+
     clear_screen()
     print_banner()
     try:
         init()
-        user = UserPixel()
+        with open(f"./{args.config}", 'r') as config_file:
+            config = json.load(config_file)
+        user = UserPixel(config)
         await update_user_info(user)
 
         while True:
-            with open('./config.json', 'r') as config_file:
-                config = json.load(config_file)
-
             battle = Battle()
             await battle.connect()
             del battle
@@ -58,7 +64,9 @@ async def main():
             user.upgradePets(upgrade_pets=config['upgrade_pets'])
             # Countdown Timer sebelum memulai pertempuran baru
             countdown_timer(10)
-            await asyncio.sleep(1)
+            sleepTime = random.randint(config['min_sleep_time'], config['max_sleep_time'])
+            print(f"sleep {sleepTime} seconds")
+            await asyncio.sleep(sleepTime)
     except Exception as e:
         print(e)
 

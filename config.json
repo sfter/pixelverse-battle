@@ -1,6 +1,8 @@
 {
-    "secret": "your_secret_key",
-    "tgId": "your_telegram_id",
-    "initData": "your_init_data",
-    "upgrade_pets": true 
+    "secret": "",
+    "tgId": "",
+    "initData": "",
+    "upgrade_pets": true,
+    "min_sleep_time": 60,
+    "max_sleep_time": 600
 }
