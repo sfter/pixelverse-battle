@@ -1,0 +1,8 @@
+{
+    "secret": "",
+    "tgId": "",
+    "initData": "",
+    "upgrade_pets": true,
+    "min_sleep_time": 60,
+    "max_sleep_time": 600
+}

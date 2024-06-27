@@ -20,6 +20,7 @@ def split_chunk(var):
 class UserPixel:
     def __init__(self, config):
         self.config = config
+
         self.headers = {
             "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
             "Connection": "keep-alive",
@@ -65,25 +66,23 @@ class UserPixel:
         url = "https://api-clicker.pixelverse.xyz/api/pets"
         req = requests.get(url, headers=self.headers)
         pets = req.json()['data']
-        users = self.getUsers()
-        print_with_timestamp(f"{hijau}Balance : {putih}{split_chunk(str(int(users['clicksCount'])))}")
+
         for pet in pets:
             if 'isMaxLevel' in pet['userPet'] and pet['userPet']['isMaxLevel']:
                 print_with_timestamp(f"{hijau}[ {pet['name']} ] Is Max Level")
             else:
                 if currBalance >= pet['userPet']['levelUpPrice']:
                     self.upgrade(pet['userPet']['id'])
-                    print_with_timestamp(f"{hijau}] success upgrade {kuning}{pet['name']}")
+                    print_with_timestamp(f"{hijau}{pet['name']} available for upgrade")
                     sleep(0.5)
                 else:
                     print_with_timestamp(
                         f"{hijau}{pet['name']} cost: {putih}-{split_chunk(str(int(pet['userPet']['levelUpPrice'] - currBalance)))} coins left!")
 
-        # Menambahkan logika untuk mengecek apakah ada pet yang bisa di-upgrade
         for pet in pets:
             if not ('isMaxLevel' in pet['userPet'] and pet['userPet']['isMaxLevel']):
                 if currBalance >= pet['userPet']['levelUpPrice']:
-                    print_with_timestamp(f"{hijau}{pet['name']} available for upgrade")
+                    print_with_timestamp(f"{hijau}] success upgrade {kuning}{pet['name']}")
                     break
 
     def isBroken(self):
